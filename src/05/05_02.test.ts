@@ -1,6 +1,6 @@
-import {test, expect, beforeEach} from 'vitest';
+import {beforeEach, expect, test} from 'vitest';
 import type {CityType} from '../02/02_02.ts';
-import {demolishHousesOnTheStreet, getBuildingsWithStaffCountGreaterThen, getHousesOnTheStreet} from './04_2.ts';
+import {createMessages, getStreetsTitlesOfGovernmentBuildings, getStreetsTitlesOfHouses} from './05_02.ts';
 
 
 let city: CityType;
@@ -73,28 +73,32 @@ beforeEach(() => {
 })
 ;
 
+// 01. создайте в том же файле ещё одну функцию, чтобы тесты прошли
+test('list of streets titles of government buildings', ()=> {
+    const  streetsNames = getStreetsTitlesOfGovernmentBuildings(city.governmentBuildings);
 
-test('Houses should be destroyed', () => {
-    demolishHousesOnTheStreet(city, 'Happy Street');
+    expect(streetsNames.length).toBe(2);
+    expect(streetsNames[0]).toBe("Central Str");
+    expect(streetsNames[1]).toBe("South Str");
+})
 
-    expect(city.houses.length).toBe(1);
-    expect(city.houses[0].id).toBe(1);
+//02. создайте в том же файле ещё одну функцию, чтобы тесты прошли
+test('list of streets titles', ()=> {
+    const streetsNames = getStreetsTitlesOfHouses(city.houses);
+
+    expect(streetsNames.length).toBe(3);
+    expect(streetsNames[0]).toBe("White Street");
+    expect(streetsNames[1]).toBe("Happy Street");
+    expect(streetsNames[2]).toBe("Happy Street");
+})
+
+test("create greeting messages for streets", () => {
+    const messages = createMessages(city.houses);
+
+    expect(messages.length).toBe(3);
+    expect(messages[0]).toBe("Hello guys from White Street");
+    expect(messages[1]).toBe("Hello guys from Happy Street");
+    expect(messages[2]).toBe("Hello guys from Happy Street");
 });
 
-test.skip('list of streets titles of houses', () => {
-    const happyHouses = getHousesOnTheStreet(city.houses, 'Happy street');
-    const whiteHouses = getHousesOnTheStreet(city.houses, 'White street');
 
-    expect(happyHouses.length).toBe(2);
-    expect(whiteHouses.length).toBe(1);
-});
-
-test('buildings with correct staff count', () => {
-    const buildings =
-        getBuildingsWithStaffCountGreaterThen(
-            city.governmentBuildings,
-            500);
-
-    expect(buildings.length).toBe(1);
-    expect(buildings[0].type).toBe('FIRE-STATION');
-});
